@@ -110,6 +110,15 @@ bool Controller::foodCollidedWithSnake(int x, int y)
     return false;
 }
 
+void Controller::placeNewFood(int x, int y)
+{
+    DisplayInd placeNewFood;
+    placeNewFood.x = x;
+    placeNewFood.y = y;
+    placeNewFood.value = Cell_FOOD;
+    m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewFood));
+}
+
 void Controller::receive(std::unique_ptr<Event> e)
 {
     try {
@@ -171,11 +180,7 @@ void Controller::receive(std::unique_ptr<Event> e)
                     clearOldFood.value = Cell_FREE;
                     m_displayPort.send(std::make_unique<EventT<DisplayInd>>(clearOldFood));
 
-                    DisplayInd placeNewFood;
-                    placeNewFood.x = receivedFood.x;
-                    placeNewFood.y = receivedFood.y;
-                    placeNewFood.value = Cell_FOOD;
-                    m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewFood));
+                    placeNewFood(receivedFood.x, receivedFood.y);
                 }
 
                 m_foodPosition = std::make_pair(receivedFood.x, receivedFood.y);
@@ -189,11 +194,7 @@ void Controller::receive(std::unique_ptr<Event> e)
                     {
                         m_foodPort.send(std::make_unique<EventT<FoodReq>>());
                     } else {
-                        DisplayInd placeNewFood;
-                        placeNewFood.x = requestedFood.x;
-                        placeNewFood.y = requestedFood.y;
-                        placeNewFood.value = Cell_FOOD;
-                        m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewFood));
+                        placeNewFood(requestedFood.x, requestedFood.y);
                     }
 
                     m_foodPosition = std::make_pair(requestedFood.x, requestedFood.y);

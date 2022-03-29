@@ -42,6 +42,7 @@ private:
     bool isOver(Snake::Segment newHead);
     void move();
     bool foodCollidedWithSnake(int x, int y);
+    void placeNewFood(int x, int y);
 
     IPort& m_displayPort;
     IPort& m_foodPort;
