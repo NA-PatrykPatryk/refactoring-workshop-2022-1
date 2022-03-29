@@ -39,7 +39,8 @@ public:
     void receive(std::unique_ptr<Event> e) override;
 
 private:
-    bool isOver(Snake::Segment);
+    bool isOver(Snake::Segment newHead);
+    bool requestedFoodCollidedWithSnake(Snake::FoodInd receivedFood);
 
     IPort& m_displayPort;
     IPort& m_foodPort;
