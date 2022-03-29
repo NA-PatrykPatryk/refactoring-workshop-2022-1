@@ -84,6 +84,21 @@ bool Controller::isOver(Snake::Segment newHead)
     return false;
 }
 
+void Controller::move()
+{
+    for (auto &segment : m_segments) 
+    {
+        if (--segment.ttl == 0) {
+            DisplayInd l_evt;
+            l_evt.x = segment.x;
+            l_evt.y = segment.y;
+            l_evt.value = Cell_FREE;
+
+            m_displayPort.send(std::make_unique<EventT<DisplayInd>>(l_evt));
+        }
+    }
+}
+
 bool Controller::requestedFoodCollidedWithSnake(Snake::FoodInd receivedFood)
 {
     for (auto const& segment : m_segments) {
@@ -114,17 +129,7 @@ void Controller::receive(std::unique_ptr<Event> e)
             m_scorePort.send(std::make_unique<EventT<ScoreInd>>());
             m_foodPort.send(std::make_unique<EventT<FoodReq>>());
         } else {
-            for (auto &segment : m_segments) 
-            {
-                if (--segment.ttl == 0) {
-                    DisplayInd l_evt;
-                    l_evt.x = segment.x;
-                    l_evt.y = segment.y;
-                    l_evt.value = Cell_FREE;
-
-                    m_displayPort.send(std::make_unique<EventT<DisplayInd>>(l_evt));
-                }
-            }
+            move();
         }
     
         m_segments.push_front(newHead);

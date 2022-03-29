@@ -40,6 +40,7 @@ public:
 
 private:
     bool isOver(Snake::Segment newHead);
+    void move();
     bool requestedFoodCollidedWithSnake(Snake::FoodInd receivedFood);
 
     IPort& m_displayPort;
