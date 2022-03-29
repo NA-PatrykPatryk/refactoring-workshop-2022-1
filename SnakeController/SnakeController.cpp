@@ -99,7 +99,7 @@ void Controller::move()
     }
 }
 
-bool Controller::foodCollidedWithSnake(int x, int y)
+bool Controller::hasFoodCollidedWithSnake(int x, int y)
 {
     for (auto const& segment : m_segments) {
         if (segment.x == x and segment.y == y) 
@@ -121,7 +121,7 @@ void Controller::placeNewFood(int x, int y)
 
 void Controller::handleReceivedFood(int foodx, int foody)
 {
-    if (foodCollidedWithSnake(foodx, foodx)) 
+    if (hasFoodCollidedWithSnake(foodx, foodx)) 
     {
         m_foodPort.send(std::make_unique<EventT<FoodReq>>());
     } else 
@@ -138,7 +138,7 @@ void Controller::handleReceivedFood(int foodx, int foody)
 
 void Controller::handleRequestedFood(int foodx, int foody)
 {
-    if (foodCollidedWithSnake(foodx, foody)) 
+    if (hasFoodCollidedWithSnake(foodx, foody)) 
     {
         m_foodPort.send(std::make_unique<EventT<FoodReq>>());
     } else {

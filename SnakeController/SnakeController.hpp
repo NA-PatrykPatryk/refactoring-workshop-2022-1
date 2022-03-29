@@ -41,7 +41,7 @@ public:
 private:
     bool isOver(Snake::Segment newHead);
     void move();
-    bool foodCollidedWithSnake(int x, int y);
+    bool hasFoodCollidedWithSnake(int x, int y);
     void placeNewFood(int x, int y);
     void handleReceivedFood(int foodx, int foody);
     void handleRequestedFood(int foodx, int foody);
