@@ -99,10 +99,10 @@ void Controller::move()
     }
 }
 
-bool Controller::requestedFoodCollidedWithSnake(Snake::FoodInd receivedFood)
+bool Controller::foodCollidedWithSnake(int x, int y)
 {
     for (auto const& segment : m_segments) {
-        if (segment.x == receivedFood.x and segment.y == receivedFood.y) 
+        if (segment.x == x and segment.y == y) 
         {
             return true;
         }
@@ -160,9 +160,7 @@ void Controller::receive(std::unique_ptr<Event> e)
             try {
                 auto receivedFood = *dynamic_cast<EventT<FoodInd> const&>(*e);
 
-                ////
-
-                if (requestedFoodCollidedWithSnake(receivedFood)) 
+                if (foodCollidedWithSnake(receivedFood.x, receivedFood.y)) 
                 {
                     m_foodPort.send(std::make_unique<EventT<FoodReq>>());
                 } else 
@@ -187,16 +185,7 @@ void Controller::receive(std::unique_ptr<Event> e)
                 try {
                     auto requestedFood = *dynamic_cast<EventT<FoodResp> const&>(*e);
 
-                    bool requestedFoodCollidedWithSnake = false;
-                    for (auto const& segment : m_segments) {
-                        if (segment.x == requestedFood.x and segment.y == requestedFood.y) 
-                        {
-                            requestedFoodCollidedWithSnake = true;
-                            break;
-                        }
-                    }
-
-                    if (requestedFoodCollidedWithSnake) 
+                    if (foodCollidedWithSnake(requestedFood.x, requestedFood.y)) 
                     {
                         m_foodPort.send(std::make_unique<EventT<FoodReq>>());
                     } else {
