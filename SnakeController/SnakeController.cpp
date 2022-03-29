@@ -116,10 +116,7 @@ void Controller::receive(std::unique_ptr<Event> e)
                     }
                 }
             }
-        }
-
-        if (not lost) 
-        {
+        
             m_segments.push_front(newHead);
             DisplayInd placeNewHead;
             placeNewHead.x = newHead.x;
