@@ -43,6 +43,8 @@ private:
     void move();
     bool foodCollidedWithSnake(int x, int y);
     void placeNewFood(int x, int y);
+    void handleReceivedFood(int foodx, int foody);
+    void handleRequestedFood(int foodx, int foody);
 
     IPort& m_displayPort;
     IPort& m_foodPort;
