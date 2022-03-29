@@ -12,6 +12,12 @@ class IPort;
 
 namespace Snake
 {
+struct Segment
+{
+    int x;
+    int y;
+    int ttl;
+};
 struct ConfigurationError : std::logic_error
 {
     ConfigurationError();
@@ -33,12 +39,7 @@ public:
     void receive(std::unique_ptr<Event> e) override;
 
 private:
-    struct Segment
-    {
-        int x;
-        int y;
-        int ttl;
-    };
+    bool isOver(Snake::Segment);
 
     IPort& m_displayPort;
     IPort& m_foodPort;
