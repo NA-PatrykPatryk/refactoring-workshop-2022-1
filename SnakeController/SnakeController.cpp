@@ -65,6 +65,14 @@ Controller::Controller(IPort& p_displayPort, IPort& p_foodPort, IPort& p_scorePo
 
 bool Controller::isOver(Snake::Segment newHead)
 {
+    if (newHead.x < 0 or newHead.y < 0 or
+                       newHead.x >= m_mapDimension.first or
+                       newHead.y >= m_mapDimension.second) 
+    {
+        m_scorePort.send(std::make_unique<EventT<LooseInd>>());
+        return true;
+    }
+
     for (auto segment : m_segments) 
         {
             if (segment.x == newHead.x and segment.y == newHead.y) 
@@ -95,11 +103,6 @@ void Controller::receive(std::unique_ptr<Event> e)
             {
                 m_scorePort.send(std::make_unique<EventT<ScoreInd>>());
                 m_foodPort.send(std::make_unique<EventT<FoodReq>>());
-            } else if (newHead.x < 0 or newHead.y < 0 or
-                       newHead.x >= m_mapDimension.first or
-                       newHead.y >= m_mapDimension.second) {
-                m_scorePort.send(std::make_unique<EventT<LooseInd>>());
-                lost = true;
             } else {
                 for (auto &segment : m_segments) 
                 {
